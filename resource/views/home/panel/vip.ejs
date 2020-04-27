@@ -1,0 +1,12 @@
+<%- include(viewPath('home/panel/head')) -%>
+
+<div class="mt-4">
+    <form action="/user/panel/vip/payment" method="POST" class="w-25">
+        <select name="plan" id="plan" class="form-control">
+            <option value="1">1 month</option>
+            <option value="3">3 month</option>
+            <option value="12">a year</option>
+        </select>
+        <button type="submit" class="btn btn-danger mt-2">Buy</button>
+    </form>
+</div>

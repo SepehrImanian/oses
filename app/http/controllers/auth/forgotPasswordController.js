@@ -6,7 +6,6 @@ const uniqueString = require('unique-string');
 module.exports = new class forgotPasswordController extends Controller {
     showForgotPassword(req, res) {
         res.render('home/auth/passwords/email', {
-            messages: req.flash('errors'),
             recaptcha: this.recaptcha.render(),
             title: "Forgot Password"
         }); // render ejs file in /resource/views
@@ -18,7 +17,7 @@ module.exports = new class forgotPasswordController extends Controller {
         if (result) {
             return this.sendResetLink(req , res);
         } else {
-            return res.redirect('/auth/password/reset');
+            return this.back(req , res);
         }
     }
 

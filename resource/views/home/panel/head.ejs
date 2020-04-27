@@ -1,0 +1,16 @@
+<div class="jumbotron">
+    <h1>Panel</h1>
+    <p>You can config your user panel</p>
+</div>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link <%= req.url == '/user/panel' ? 'active' : ''  %>" href="/user/panel">User Information</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link <%= req.url == '/user/panel/history' ? 'active' : ''  %>" href="/user/panel/history">Payments</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link <%= req.url == '/user/panel/vip' ? 'active' : ''  %>" href="/user/panel/vip">Vip</a>
+    </li>
+</ul>

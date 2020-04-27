@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Comments</h2>
+    <div class="btn-group">
+        <a href="/admin/comments/approved" class="btn btn-sm btn-primary">Not Approveded Comment</a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Sender name</th>
+                <th>Content</th>
+                <th>Text</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% comments.docs.forEach(comment => { %>
+                <tr>
+                    <td><%= comment.user.name %></td>
+                    <td>
+                        <% if(comment.course) {%>
+                            <a href="<%= comment.course.path() %>"><%= comment.course.title %></a>
+                        <% } else if(comment.episode) { %>
+                            <a href="<%= comment.episode.path() %>"><%= comment.episode.title %></a>
+                        <% } %>
+                    </td>
+                    <td><%= comment.comment %></td>
+                    <td>
+                        <form action="/admin/comments/<%= comment.id %>?_method=DELETE" method="post">
+                            <!-- for send delete req -->
+                            <div class="btn-group btn-group-sm">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- { pagination: courses } for back data to pagination.ejs in layouts for add pagination button -->
+
+    <%- include(viewPath('layouts/pagination') , { pagination: comments }); -%>
+
+</div>

@@ -1,0 +1,176 @@
+<div class="row">
+    <!-- Blog Post Content Column -->
+    <div class="col-lg-8">
+        <!-- Title -->
+        <h1 class="mb-3"><%= course.title %></h1>
+
+        <!-- Author -->
+        <p class="text-muted small">
+            <span> By <a href="#"><%= course.user.name %></a></span>
+            -
+            <!-- <span>Send it in April , 2020 </span> -->
+            <span><%= date(course.createdAt).format("dddd, MMMM YYYY") %></span>
+        </p>
+
+        <hr>
+        <!-- Post Content -->
+        <div id="content">
+            <%- course.body %>
+        </div>
+        <hr>
+
+        <% if(auth.check) { %>
+            <% if(course.type == 'vip') { %>
+                <% if(! req.user.isVip() ) { %>
+                    <div class="alert alert-danger">To view this course, you need to prepare a special membership</div>
+                <% } else { %>
+                    <div class="alert alert-success">You are enrolled in this course , special membership</div>
+                <% } %>
+            <% } else if(course.type == 'cash') { %>
+                <% if(! req.user.checkLearning(course.id) ) { %>
+                    <div class="alert alert-danger">To view this course, you need to prepare a cash course</div>
+                <% } else { %>
+                    <div class="alert alert-success">You are enrolled in this course , cash course</div>
+                <% } %>
+            <% } else { %>
+                <div class="alert alert-success">You are enrolled in this course , free</div>
+            <% } %>
+        <% } else { %>
+            <div class="alert alert-danger">To view this course, you must first log in to the site</div>
+        <% } %>
+
+
+        <h3>Parts of the course</h3>
+        <table class="table table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>Part number</th>
+                    <th>Title of the episode</th>
+                    <th>Part time</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <% course.episodes.forEach(episode => { %>
+                <tr>
+                    <th><a href="/courses/آموزش-پروژه-محور-bootstrap-1/1"><%= episode.number %></a></th>
+                    <td><%= episode.title %></td>
+                    <td><%= episode.time %></td>
+                    <td>
+                        <a href="<%= episode.download(req) %>">Download</a>
+                    </td>
+                </tr>
+                <% }) %>
+
+            </tbody>
+        </table>
+        <!-- Blog Comments -->
+        <hr>
+        <!-- Comments Form -->
+
+        <%- include(viewPath('layouts/comments') , { subject: course , comments: course.comments }) -%>
+
+
+
+    </div>
+
+    <!-- Blog Sidebar Widgets Column -->
+
+    <div class="col-md-4">
+
+
+
+        <% if(auth.check) { %> 
+            <% if(course.type == 'vip') { %>
+                <% if(! req.user.isVip() ) { %>
+                    <div class="card my-4">
+                        <div class="card-body">
+                            <a href="#">To view this course, you need to prepare a special membership</a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="card my-4">
+                        <div class="card-body">
+                            <p>You are enrolled in this course , special membership</p>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else if(course.type == 'cash') { %>
+                <% if(! req.user.checkLearning(course.id) ) { %>
+                    <div class="card my-4">
+                        <div class="card-body">
+                            <p>To use this course, you need to buy this course for <%= course.price %> Tomans</p>
+                            <form action="/courses/payment" method="post">
+                                <input type="hidden" name="course" value="<%= course.id %>">
+                                <button type="submit" class="btn btn-success">Buy Course</button>
+                            </form>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="card my-4">
+                        <div class="card-body">
+                            <p>You are enrolled in this course , cash course</p>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <div class="card my-4">
+                    <div class="card-body">
+                        <p>You are enrolled in this course , free</p>
+                    </div>
+                </div>
+            <% } %>
+        <% } else { %>
+            <div class="card my-4">
+                <div class="card-body">
+                    <a href="/auth/login">To view this course, you must first log in to the site</a>
+                </div>
+            </div>
+        <% } %>
+
+
+
+
+
+        <!-- Search Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Search</h5>
+            <div class="card-body">
+                <form class="input-group" action="/courses" method="GET">
+                    <input type="text" class="form-control" name="search" placeholder="what are you looking for?">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="submit">Search</button>
+                    </span>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Categories</h5>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <ul class="list-unstyled mb-0">
+                            <% categories.forEach(cate => { %>
+                                <li>
+                                    <a href="/courses?category=<%= cate.slug %>"><%= cate.name %></a>
+                                    <% if(cate.childs) { %>
+                                        <ol>
+                                            <% cate.childs.forEach(child => { %>
+                                                <li>
+                                                    <a href="/courses?category=<%= child.slug %>"><%= child.name %></a>
+                                                </li>
+                                            <% }) %>
+                                        </ol>
+                                    <% } %>    
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

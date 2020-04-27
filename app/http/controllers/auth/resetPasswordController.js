@@ -5,7 +5,6 @@ const User = require('app/models/user');
 module.exports = new class resetPasswordController extends Controller {
     showResetPassword(req, res) {
         res.render('home/auth/passwords/reset', {
-            messages: req.flash('errors'),
             recaptcha: this.recaptcha.render(),
             title: "Reset Password",
             token: req.params.token
@@ -18,6 +17,7 @@ module.exports = new class resetPasswordController extends Controller {
         if (result) {
             return this.resetPassword(req , res);
         } else {
+            req.flash('formData' , req.body);
             return res.redirect('/auth/password/reset/' + req.body.token); // for redirect past route with token value also
         }
     }

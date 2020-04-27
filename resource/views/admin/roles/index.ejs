@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Roles</h2>
+    <div class="btn-group">
+        <a href="/admin/users/roles/create" class="btn btn-sm btn-danger">Create a new role</a>
+        <a href="/admin/users/permissions" class="btn btn-sm btn-info">Permission</a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Roles Type</th>
+                <th>Explain</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% roles.docs.forEach(role => { %>
+                <tr>
+                    <td><a href="#"><%= role.name %></a></td>
+                    <td><%= role.label %></td>
+                    <td>
+                        <form action="/admin/users/roles/<%= role.id %>?_method=DELETE" method="post">
+                            <!-- for send delete req -->
+                            <div class="btn-group btn-group-sm">
+                                <a href="/admin/users/roles/<%= role.id %>/edit" class="btn btn-primary">Edit</a>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- { pagination: courses } for back data to pagination.ejs in layouts for add pagination button -->
+
+    <%- include(viewPath('layouts/pagination') , { pagination: roles }); -%>
+
+</div>

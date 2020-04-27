@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Episode Edit</h2>
+</div>
+<form class="form-horizontal" action="/admin/episodes/<%= episode._id %>?_method=put" method="post">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="title" class="control-label font-weight-bold">Episode Title</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Enter the title of the item" value="<%= old('title' , episode.title) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="course" class="control-label font-weight-bold font-weight-bold">Courses</label>
+            <select name="course" id="course" class="form-control">
+                <% courses.forEach(course => { %>
+                    <option value="<%= course._id %>" <%= String(old('course' , episode.course)) == String(course._id) ? 'selected' : '' %> ><%= course.title %></option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="col">
+            <label for="time" class="control-label font-weight-bold">Episode Time</label>
+            <input type="text" class="form-control" name="time" id="time" placeholder="Enter the time of the item" value="<%= old('time' , episode.time) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="videoUrl" class="control-label font-weight-bold">Episode videoUrl</label>
+            <input type="text" class="form-control" name="videoUrl" id="videoUrl" placeholder="Enter the videoUrl of the item" value="<%= old('videoUrl' , episode.videoUrl) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="body" class="control-label font-weight-bold">Text</label>
+            <textarea rows="5" class="form-control" name="body" id="body"
+                placeholder="Enter the text of the article"><%= old('body' , episode.body) %></textarea>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="type" class="control-label font-weight-bold font-weight-bold">Course Type</label>
+            <select name="type" id="type" class="form-control">
+                <option value="vip" <%= old('type' , episode.type) === 'vip' ? 'selected' : '' %> >Vip</option>
+                <option value="cash" <%= old('type' , episode.type) === 'cash' ? 'selected' : '' %> >Cash</option>
+                <option value="free" <%= old('type' , episode.type) === 'free' ? 'selected' : '' %> >Free</option>
+            </select>
+        </div>
+        <div class="col">
+            <label for="number" class="control-label font-weight-bold">Number</label>
+            <input type="text" class="form-control" name="number" id="number" placeholder="Enter the number of the episode" value="<%= old('number' , episode.number) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">Send</button>
+        </div>
+    </div>
+</form>

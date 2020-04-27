@@ -1,0 +1,85 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Edit Course</h2>
+</div>
+<form class="form-horizontal" action="/admin/courses/<%= course._id %>?_method=put" method="post" enctype="multipart/form-data">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="title" class="control-label font-weight-bold">Course Title</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Enter the price of the item" value="<%= course.title %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="type" class="control-label font-weight-bold font-weight-bold">Course Type</label>
+            <select name="type" id="type" class="form-control">
+                <option value="vip" <%= course.type === 'vip' ? 'selected' : '' %> >Vip</option>
+                <option value="cash" <%= course.type === 'cash' ? 'selected' : '' %> >Cash</option>
+                <option value="free" <%= course.type === 'free' ? 'selected' : '' %> >Free</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="categories" class="control-label font-weight-bold font-weight-bold">Category</label>
+            <select name="categories" id="categories" class="form-control form-control-chosen" data-placeholder="Please select category..." multiple>
+                <% categories.forEach(cate => { %>
+                    <option value="<%= cate.id %>" <%= course.categories.indexOf(cate.id) !== -1 ? 'selected' : '' %>><%= cate.name %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="body" class="control-label font-weight-bold">Text</label>
+            <textarea rows="5" class="form-control" name="body" id="body"
+                placeholder="Enter the text of the article"><%= course.body %></textarea>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="images" class="control-label font-weight-bold">Course Image</label>
+            <input type="file" class="form-control" name="images" id="images" placeholder="Enter the image of the article">
+        </div>
+    </div>
+    <div class="form-group row">
+        <% Object.entries(course.images).forEach(([size , image]) => { %>
+            <div class="col-sm-2">
+                <label class="control-label">
+                    <%= size %>
+                    <input type="radio" name="imagesThumb" value="<%= image %>" checked="">
+                    <a href="<%= image %>" target="_blank"><img src="<%= image %>" width="100%"></a>
+                </label>
+            </div>
+        <% }) %>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="price" class="control-label font-weight-bold">Price</label>
+            <input type="text" class="form-control" name="price" id="price" placeholder="Enter the price of the article" value="<%= course.price %>">
+        </div>
+        <div class="col">
+            <label for="tags" class="control-label font-weight-bold">Tags</label>
+            <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter the tags of the article" value="<%= course.tags %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">Update</button>
+        </div>
+    </div>
+</form>
+
+
+<link rel="stylesheet" href="/css/component-chosen.min.css">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script>
+    CKEDITOR.replace('body' , {
+        filebrowserUploadUrl: '/admin/upload-image'
+    });
+    $('.form-control-chosen').chosen({});
+</script>

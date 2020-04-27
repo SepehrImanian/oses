@@ -1,0 +1,25 @@
+<%- include(viewPath('home/panel/head')) -%>
+
+<div style="margin: 20px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Payment amount</th>
+                <th>About</th>
+                <th>Payment status</th>
+        </tr></thead>
+        <tbody>
+            
+            <% payments.docs.forEach(payment => { %> 
+                <tr>
+                    <td><%= payment.price %> Toman</td>
+                    <td><%= payment.vip ? 'for vip' : `buy ${payment.course.title}` %></td>
+                    <td><%= payment.payment ? 'Successful' : 'Unsuccessful' %></td>
+                </tr>
+            <% }) %>
+
+        </tbody>
+    </table>
+
+    <%- include(viewPath('layouts/pagination') , { pagination : payments }) %>
+</div>

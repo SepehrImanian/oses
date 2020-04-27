@@ -1,0 +1,32 @@
+<!-- this page for using paginate in web (default) -->
+
+<div class="d-flex justify-content-center">
+    <% if (pagination.pages > 1) { %>  
+        <ul class="pagination">  
+          <% if (pagination.page > 1) { %>
+              <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+          <% } %>
+          <% var i = 1;
+          if (pagination.page > 5) {
+            i = +pagination.page - 4;
+          } %>
+          <% if (i !== 1) { %>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+          <% } %>
+          <% for (i; i<=pagination.pages; i++) { %>
+            <% if (pagination.page == i) { %>
+                <li class="page-item active"><a class="page-link" href="#"><span><%= i %></span></a></li>
+            <% } else { %>
+                <li class="page-item"><a class="page-link" href="?page=<%= i %>"><%= i %></a></li>
+            <% } %>
+            <% if (i == (+pagination.page + 4)) { %>
+                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+            <% break; } %>
+          <% } %>
+          <% if (pagination.page != pagination.pages) { %>
+              <li class="page-item"><a class="page-link" href="?page=<%= pagination.pages %>">&raquo;</a></li>
+          <% } %>
+        </ul>  
+    <% } %>  
+</div>
+      

@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Category Edit</h2>
+</div>
+<form class="form-horizontal" action="/admin/categories/<%= category.id %>?_method=put" method="post">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="name" class="control-label font-weight-bold">Category Title</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Enter the title of the item" value="<%= old('name' , category.name) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="parent" class="control-label font-weight-bold font-weight-bold">Categories</label>
+            <select name="parent" id="parent" class="form-control">
+                <option value="none">main category</option>
+                <% categories.forEach(cate => { %>
+                    <option value="<%= cate.id %>" <%= String(old('categories' , category.parent)) == String(cate.id) ? 'selected' : '' %> ><%= cate.name %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">Send</button>
+        </div>
+    </div>
+</form>

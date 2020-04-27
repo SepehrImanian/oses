@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Add New Role</h2>
+</div>
+<form class="form-horizontal" action="/admin/users/<%= user.id %>/addrole?_method=put" method="post">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="name" class="control-label font-weight-bold">Username & Email</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Enter the title of the item" value="<%= user.name + ' - ' + user.email %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="roles" class="control-label font-weight-bold font-weight-bold">Roles</label>
+            <select name="roles" id="roles" class="form-control form-control-chosen" data-placeholder="Please select roles..." multiple>
+                <% roles.forEach(role => { %>
+                    <option value="<%= role.id %>" <%= old('roles' , user.roles).indexOf(role.id) !== -1 ? 'selected' : '' %>><%= role.label %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">Send</button>
+        </div>
+    </div>
+</form>
+
+<link rel="stylesheet" href="/css/component-chosen.min.css">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script>
+    $('.form-control-chosen').chosen({});
+</script>

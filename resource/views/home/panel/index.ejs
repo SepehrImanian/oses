@@ -1,0 +1,11 @@
+<%- include(viewPath('home/panel/head')) -%>
+
+<ul style="margin: 20px">
+    <li><b>Username</b> : <%= auth.user.name %></li>
+    <li><b>Email</b> : <%= auth.user.email %></li>
+    <% if(req.user.isVip()) { %>
+        <li> <b>Vip time end</b> : <%= date(req.user.vipTime).fromNow() %></li>
+    <% } else { %>
+        <li> <b>Your vip time ended</b></li>
+    <% } %>
+</ul>

@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Roles Edit</h2>
+</div>
+<form class="form-horizontal" action="/admin/users/roles/<%= role.id %>?_method=put" method="post">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="name" class="control-label font-weight-bold">Roles Title</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Enter the title of the item" value="<%= old('name' , role.name) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="label" class="control-label font-weight-bold">Explain</label>
+            <input type="text" class="form-control" name="label" id="label" placeholder="Enter the Explain of the item" value="<%= old('label' , role.label) %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="permissions" class="control-label font-weight-bold font-weight-bold">Permissions</label>
+            <select name="permissions" id="permissions" class="form-control form-control-chosen" data-placeholder="Please select permission..." multiple>
+                <% permissions.forEach(per => { %>
+                    <option value="<%= per.id %>" <%= old('permissions' , role.permissions).indexOf(per.id) !== -1 ? 'selected' : '' %>><%= per.label %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">Edit</button>
+        </div>
+    </div>
+</form>
+
+<link rel="stylesheet" href="/css/component-chosen.min.css">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script>
+    $('.form-control-chosen').chosen({});
+</script>

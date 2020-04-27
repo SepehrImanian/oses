@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Nine</a>
+            <a class="navbar-brand" href="/"><%= __('title') %></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
                 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -21,31 +21,36 @@
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item <%= req.url == '/' ? 'active' : '' %>">
                         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                    <li class="nav-item <%= req.url == '/about' ? 'active' : '' %>">
+                        <a class="nav-link" href="/about">About Us</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Courses</a>
+                    <li class="nav-item <%= req.url == '/courses' ? 'active' : '' %>">
+                        <a class="nav-link" href="/courses" tabindex="-1" aria-disabled="true">Courses</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <% if(req.getLocale() == "en") { %>
+                        <li><a class="btn btn-info btn-sm mr-2" href="/lang/fa">Persian Language</a></li>
+                    <% } else if (req.getLocale() == "fa") { %>
+                        <li><a class="btn btn-info btn-sm mr-2" href="lang/en">زبان انگلیسی</a></li>
+                    <% } %>
                     <!-- if we login in site dont show login and register button  -->
                     <% if(auth.check) { %>
-                    <li><a class="btn btn-success btn-sm mr-2" href="/user-panel">Panel</a></li>
-                    <li><a class="btn btn-danger btn-sm" href="/logout">Sign Out</a></li>
+                        <li><a class="btn btn-success btn-sm mr-2" href="/user/panel">Panel</a></li>
+                        <li><a class="btn btn-danger btn-sm" href="/logout">Sign Out</a></li>
                     <% } else { %>
-                    <li><a class="btn btn-success btn-sm mr-2" href="/auth/login">Login</a></li>
-                    <li><a class="btn btn-primary btn-sm" href="/auth/register">Register</a></li>
+                        <li><a class="btn btn-success btn-sm mr-2" href="/auth/login">Login</a></li>
+                        <li><a class="btn btn-primary btn-sm" href="/auth/register">Register</a></li>
                     <% } %>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container mt-4">
         <%- body %>
     </div>
 
@@ -54,6 +59,21 @@
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <%  let sweetalert = req.flash('sweetalert');
+        if(sweetalert.length) { 
+            let data = sweetalert[0]; %>
+            <script>
+                Swal.fire({
+                    title: '<%= data.title %>',
+                    text: '<%= data.message %>',
+                    icon: '<%= data.type %>',
+                    showConfirmButton: <%= data.button !== null ? true : false %>,
+                    confirmButtonText: '<%= data.button %>',
+                    timer: <%= data.button !== null ? 'null' : data.timer %>
+                });
+            </script>
+    <% } %>
     <%- script %>
     <!-- this "script" for load recaptcha (bug express ejs layout) -->
 </body>

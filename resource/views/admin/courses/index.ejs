@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Courses</h2>
+    <div class="btn-group">
+        <a href="/admin/courses/create" class="btn btn-sm btn-primary">Create a new course</a>
+        <a href="/admin/episodes" class="btn btn-sm btn-danger">Videos section</a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Number of comments</th>
+                <th>Hits</th>
+                <th>Number of participants</th>
+                <th>Course status</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% courses.docs.forEach(course => { %>
+                <tr>
+                    <td><a href="/courses/آپدیت-جدید-راکت"><%= course.title %></a></td>
+                    <td><%= course.commentCount %></td>
+                    <td><%= course.viewCount %></td>
+                    <td>
+                        <%= course.typeForEjs() %>
+                    </td>
+                    <td>
+                        0
+                    </td>
+                    <td>
+                        <form action="/admin/courses/<%= course._id %>?_method=DELETE" method="post">
+                            <!-- for send delete req -->
+                            <div class="btn-group btn-group-sm">
+                                <a href="/admin/courses/<%= course._id %>/edit" class="btn btn-primary">Edit</a>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- { pagination: courses } for back data to pagination.ejs in layouts for add pagination button -->
+
+    <%- include(viewPath('layouts/pagination') , { pagination: courses }); -%>
+
+</div>

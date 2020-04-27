@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Create Course</h2>
+</div>
+<form class="form-horizontal" action="/admin/courses/create" method="post" enctype="multipart/form-data">
+
+    <%- include(viewPath('layouts/error-messages')) -%>
+
+    <div class="form-group row">
+        <div class="col">
+            <label for="title" class="control-label font-weight-bold">Course Title</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Enter the title of the item" value="<%= old('title') %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="type" class="control-label font-weight-bold font-weight-bold">Course Type</label>
+            <select name="type" id="type" class="form-control">
+                <option value="vip" <%= old('type') === 'vip' ? 'selected' : '' %> >Vip</option>
+                <option value="cash" <%= old('type') === 'cash' ? 'selected' : '' %> >Cash</option>
+                <option value="free" <%= old('type') === 'free' ? 'selected' : '' %> >Free</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="categories" class="control-label font-weight-bold font-weight-bold">Category</label>
+            <select name="categories" id="categories" class="form-control form-control-chosen" data-placeholder="Please select category..." multiple>
+                <% categories.forEach(cate => { %>
+                    <option value="<%= cate.id %>"><%= cate.name %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="body" class="control-label font-weight-bold">Text</label>
+            <textarea rows="10" class="form-control" name="body" id="body"
+                placeholder="Enter the text of the article"><%= old('body') %></textarea>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="images" class="control-label font-weight-bold">Course Image</label>
+            <input type="file" class="form-control" name="images" id="images" placeholder="Enter the image of the article">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label for="price" class="control-label font-weight-bold">Price</label>
+            <input type="text" class="form-control" name="price" id="price" placeholder="Enter the price of the article" value="<%= old('price') %>">
+        </div>
+        <div class="col">
+            <label for="tags" class="control-label font-weight-bold">Tags</label>
+            <input type="text" class="form-control" name="tags" id="tags" placeholder="Enter the tags of the article" value="<%= old('tags') %>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit" class="btn btn-danger">Send</button>
+        </div>
+    </div>
+</form>
+
+<link rel="stylesheet" href="/css/component-chosen.min.css">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script>
+    CKEDITOR.replace('body' , {
+        filebrowserUploadUrl: '/admin/upload-image'
+    });
+    $('.form-control-chosen').chosen({});
+</script>

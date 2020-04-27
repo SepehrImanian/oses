@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Permissions</h2>
+    <div class="btn-group">
+        <a href="/admin/users/permissions/create" class="btn btn-sm btn-danger">Create a new permission</a>
+        <a href="/admin/users/roles" class="btn btn-sm btn-info">Roles</a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Permission Type</th>
+                <th>Explain</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% permissions.docs.forEach(permission => { %>
+                <tr>
+                    <td><a href="#"><%= permission.name %></a></td>
+                    <td><%= permission.label %></td>
+                    <td>
+                        <form action="/admin/users/permissions/<%= permission.id %>?_method=DELETE" method="post">
+                            <!-- for send delete req -->
+                            <div class="btn-group btn-group-sm">
+                                <a href="/admin/users/permissions/<%= permission.id %>/edit" class="btn btn-primary">Edit</a>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- { pagination: courses } for back data to pagination.ejs in layouts for add pagination button -->
+
+    <%- include(viewPath('layouts/pagination') , { pagination: permissions }); -%>
+
+</div>

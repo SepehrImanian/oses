@@ -4,7 +4,6 @@ const passport = require('passport');
 module.exports = new class registerController extends Controller {
     showRegisterForm(req, res) {
         res.render('home/auth/register', {
-            messages: req.flash('errors'),
             recaptcha: this.recaptcha.render(),
             title: "Register"
         }); // render ejs file in /resource/views
@@ -17,7 +16,7 @@ module.exports = new class registerController extends Controller {
         if (result) {
             return this.register(req, res, next);
         } else {
-            return res.redirect('/auth/register');
+            return this.back(req , res);
         }
     }
 

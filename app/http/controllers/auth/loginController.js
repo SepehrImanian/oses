@@ -4,7 +4,6 @@ const passport = require('passport');
 module.exports = new class loginController extends Controller {
     showLoginForm(req, res) {
         res.render('home/auth/login', {
-            messages: req.flash('errors'),
             recaptcha: this.recaptcha.render(),
             title: "Login"
         }); // render ejs file in /resource/views
@@ -16,7 +15,7 @@ module.exports = new class loginController extends Controller {
         if (result) {
             return this.login(req, res, next);
         } else {
-           return res.redirect('/auth/login'); 
+            return this.back(req , res); 
         }
     }
 

@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>Users</h2>
+    <div class="btn-group">
+        <a href="/admin/users/roles" class="btn btn-sm btn-success">Roles</a>
+        <a href="/admin/users/create" class="btn btn-sm btn-primary">Create User</a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Register Date</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.docs.forEach(user => { %>
+                <tr>
+                    <td><a href="#"><%= user.name %></a></td>
+                    <td><%= user.email %></td>    
+                    <td><%= date(user.createdAt).fromNow() %></td>   
+                    <td>
+                        <form action="/admin/users/<%= user.id %>?_method=DELETE" method="post">
+                            <!-- for send delete req -->
+                            <div class="btn-group btn-group-sm">
+                                <a href="/admin/users/<%= user.id %>/toggleadmin" class="btn btn-info"><%= user.admin ? 'Cancel Admin' : 'Admin' %></a>
+                                <% if (user.admin) { %>
+                                    <a href="/admin/users/<%= user.id %>/addrole" class="btn btn-success">Access Level</a>
+                                <% } %>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- { pagination: courses } for back data to pagination.ejs in layouts for add pagination button -->
+
+    <%- include(viewPath('layouts/pagination') , { pagination: users }); -%>
+
+</div>
