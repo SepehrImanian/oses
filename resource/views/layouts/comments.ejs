@@ -5,6 +5,7 @@
             <%- include(viewPath('layouts/error-messages')) -%>
             
             <form role="form" action="/comment" method="post">
+                <input type="hidden" name="_csrf" value="<%= req.csrfToken() %>">
                 <input type="hidden" name="<%= subject.constructor.modelName.toLowerCase() %>" value="<%= subject.id %>">
                 <div class="form-group">
                     <textarea name="comment" class="form-control" rows="3"></textarea>
@@ -63,7 +64,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/comment" method="post">
-
+                        <input type="hidden" name="_csrf" value="<%= req.csrfToken() %>">
                         <input type="hidden" name="parent" value="">
                         <input type="hidden" name="<%= subject.constructor.modelName.toLowerCase() %>" value="<%= subject.id %>">
 
