@@ -11,12 +11,10 @@ const passport = require('passport');
 const i18n = require("i18n");
 const methodOverride = require('method-override');
 const helmet = require('helmet');
-const csrf = require('csurf');
 const Helpers = require('./helpers');
 
 // Middleware
 const rememberLogin = require('./http/middleware/rememberLogin');
-const csrfErrorHandler = require('./http/middleware/csrfErrorHandler');
 const activeUser = require('./http/middleware/activeUser');
 
 // Helpers
@@ -86,7 +84,6 @@ module.exports = class Application {
     setRouters() {
         app.use(require('app/routes/api'));
         app.use(activeUser.handle);
-        app.use(csrfErrorHandler.handler); // for handeling csrf errors
-        app.use(csrf({ cookie: true }) , require('app/routes/web')); //call api and web routes
+        app.use(require('app/routes/web')); //call api and web routes
     }
 }

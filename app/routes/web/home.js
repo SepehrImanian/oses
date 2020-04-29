@@ -49,6 +49,7 @@ router.get('/logout' , (req , res) => {
     res.clearCookie('remember_token');
     res.redirect('/');
 });
+
 router.get('/user/activation/:token' , userController.activation);
 
 module.exports = router;
