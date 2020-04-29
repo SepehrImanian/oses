@@ -6,6 +6,7 @@ let Schema = mongoose.Schema;
 
 const userSchema = Schema({
     name: { type: String , required: true },
+    active: { type: Boolean , default: false },
     admin : { type: Boolean , default: 0 },
     email : { type: String , required: true , unique: true },
     password: { type: String , required: true },
@@ -18,21 +19,11 @@ const userSchema = Schema({
 
 userSchema.plugin(mongoosePaginate); // for add pagination to user
 
-// for hash password and then set password prapertty in model
-userSchema.pre('save' , function(next) {
+userSchema.methods.hashPassword = function(password) {
     let salt = bcrypt.genSaltSync(15);
-    let hash = bcrypt.hashSync(this.password , salt);
-    this.password = hash;
-    next();
-});
-
-// for hash password before findOneAndUpdate in resetPasswordController (updating password)
-userSchema.pre('findOneAndUpdate' , function(next) { 
-    let salt = bcrypt.genSaltSync(15);
-    let hash = bcrypt.hashSync(this.getUpdate().$set.password , salt);// "this.getUpdate().$set.password" for get password from reset controller
-    this.getUpdate().$set.password = hash;
-    next();
-});
+    let hash = bcrypt.hashSync(password , salt);
+    return hash;
+}
 
 // for define method in Schema and compare hash pass with login password
 userSchema.methods.comparePass = function(password) {
@@ -74,9 +65,27 @@ userSchema.methods.checkLearning = function(courseId) { // for check user is cas
 module.exports = mongoose.model('User' , userSchema);
 
 /*  usage for future
+
 bcrypt.hash(this.password , bcrypt.genSaltSync(15) , (err, hash) => {
     if(err) console.log(err);
     this.password = hash;
     next();
 });
+
+// for hash password and then set password prapertty in model
+userSchema.pre('save' , function(next) {
+    let salt = bcrypt.genSaltSync(15);
+    let hash = bcrypt.hashSync(this.password , salt);
+    this.password = hash;
+    next();
+});
+
+// for hash password before findOneAndUpdate in resetPasswordController (updating password)
+userSchema.pre('findOneAndUpdate' , function(next) { 
+    let salt = bcrypt.genSaltSync(15);
+    let hash = bcrypt.hashSync(this.getUpdate().$set.password , salt);// "this.getUpdate().$set.password" for get password from reset controller
+    this.getUpdate().$set.password = hash;
+    next();
+});
+
 */

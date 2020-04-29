@@ -46,6 +46,6 @@ router.use('/auth' , redirectIfAuthenticated.handle , authRouter);
 
 // Error handeling (last route to collecting all erros for routes before)
 router.all('*' , errorHandler.error404);
-router.use(errorHandler.handler);
+router.use(errorHandler.handler)
 
 module.exports = router;

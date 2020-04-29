@@ -8,7 +8,11 @@ module.exports = new class errorHandler extends middleware {
 
     async error404(req, res, next) {
         try {
-            throw new Error('This page not found 404');
+            if(req.url.substring(0,4) == '/api'){
+                next();
+            } else {
+                throw new Error('This page not found 404');
+            }
         } catch (err) {
             next(err); // pass errors to next middleware
         }

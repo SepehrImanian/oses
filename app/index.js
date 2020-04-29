@@ -9,9 +9,17 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
 const i18n = require("i18n");
-const Helpers = require('./helpers');
-const rememberLogin = require('./http/middleware/rememberLogin');
 const methodOverride = require('method-override');
+const helmet = require('helmet');
+const csrf = require('csurf');
+const Helpers = require('./helpers');
+
+// Middleware
+const rememberLogin = require('./http/middleware/rememberLogin');
+const csrfErrorHandler = require('./http/middleware/csrfErrorHandler');
+const activeUser = require('./http/middleware/activeUser');
+
+// Helpers
 const gate = require('app/helpers/gate');
 
 module.exports = class Application {
@@ -42,6 +50,8 @@ module.exports = class Application {
         require('./passport/passport-local'); // for call own passport strategy
         require('./passport/passport-google');// exactly like passport local for call google strategy
         require('./passport/passport-jwt');// this is for jwt auth with passport (API)
+        app.enable('trust proxy'); // beacuse we using nginx (use that before helmet)
+        app.use(helmet()); // using helmet in our project for security
         app.use(express.static(config.layout.public_dir));
         app.set('view engine', config.layout.view_engine); //set up template engine
         app.set('views', config.layout.view_dir); // render ejs file in this directory
@@ -75,6 +85,8 @@ module.exports = class Application {
 
     setRouters() {
         app.use(require('app/routes/api'));
-        app.use(require('app/routes/web')); //call api and web routes
+        app.use(activeUser.handle);
+        app.use(csrfErrorHandler.handler); // for handeling csrf errors
+        app.use(csrf({ cookie: true }) , require('app/routes/web')); //call api and web routes
     }
 }

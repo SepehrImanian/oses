@@ -4,7 +4,11 @@ const Payment = require('app/models/payment');
 module.exports = new class homeController extends Controller {
     async user (req , res) {
         try {
-            return res.json(req.user);
+            let user = await req.user.populate({ path: 'roles' , populate: [{ path: 'permissions' }]}).execPopulate();
+            res.json({
+                data: this.filterUserData(user),
+                status: 'success'
+            });
         } catch (err) {
             this.failed(res , err.message);
         }
@@ -22,6 +26,28 @@ module.exports = new class homeController extends Controller {
             });
         } catch (err) {
             this.failed(res , err.message);
+        }
+    }
+    
+    // filter and transform data for send to user
+    filterUserData(user) { 
+        return {
+            id: user.id,
+            admin: user.admin,
+            name: user.name,
+            email: user.email,
+            roles: user.roles.map(role => {
+                return {
+                    name: role.name,
+                    label: role.label,
+                    permissions: role.permissions.map(permission => {
+                        return {
+                            name: permission.name,
+                            label: permission.label,
+                        }
+                    })
+                }
+            })
         }
     }
 }

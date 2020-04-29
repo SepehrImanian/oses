@@ -45,8 +45,8 @@ episodeSchema.methods.inc = async function(field , num = 1) {
     await this.save();
 }
 
-episodeSchema.methods.download = function(req) {
-    if(!req.isAuthenticated()) return '#';
+episodeSchema.methods.download = function(check , user) {
+    if(!check) return '#';
 
     // free or vip or cash in episode model but canUserUse value return form course model
 
@@ -55,9 +55,9 @@ episodeSchema.methods.download = function(req) {
     if(this.type == 'free') {
         status = true;
     } else if (this.type == 'vip') {
-        status = req.user.isVip();
+        status = user.isVip();
     } else if (this.type == 'cash') {
-        status = req.user.checkLearning(this.course);
+        status = user.checkLearning(this.course);
     }
     /* end code */
 

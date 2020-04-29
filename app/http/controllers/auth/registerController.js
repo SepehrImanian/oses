@@ -11,7 +11,7 @@ module.exports = new class registerController extends Controller {
     //render google recaptcha with render() and send it to ejs template
 
     async registerProccess(req, res, next) {
-        // await this.recaptchaValidation(req, res);
+        await this.recaptchaValidation(req, res);
         let result = await this.validationData(req);
         if (result) {
             return this.register(req, res, next);

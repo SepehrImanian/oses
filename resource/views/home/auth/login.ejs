@@ -6,6 +6,7 @@
             </div>
             <div class="card-body">
                 <form class="form-horizontal" role="form" method="POST" action="/auth/login" novalidate>
+                    <input type="hidden" name="_csrf" value="<%= req.csrfToken() %>">
 
                     <%- include(viewPath('layouts/error-messages')) -%>
 

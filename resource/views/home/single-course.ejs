@@ -58,7 +58,7 @@
                     <td><%= episode.title %></td>
                     <td><%= episode.time %></td>
                     <td>
-                        <a href="<%= episode.download(req) %>">Download</a>
+                        <a href="<%= episode.download(req.isAuthenticated() , req.user) %>">Download</a>
                     </td>
                 </tr>
                 <% }) %>

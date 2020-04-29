@@ -31,12 +31,16 @@ passport.use('local-register' , new localStrategy({
     User.findOne({ 'email' : email } , (err , user) => {
         if(err) return done(err);
         if(user) return done(null , false , req.flash('errors' , 'this user exist'));
+
         //if user not exist save in db
         const newUser = new User({
             name: req.body.name,
-            email,
-            password
+            email
         });
+
+        // hash password and save in database
+        newUser.$set({ password: newUser.hashPassword(password) });
+
         newUser.save(err => {
             if (err) return done(null , false , req.flash('errors' , 'not succeess register , try again'));
             // null = dont have err  , false = not still user login

@@ -12,7 +12,7 @@ module.exports = new class resetPasswordController extends Controller {
     }
 
     async resetPasswordProccess(req, res) {
-        // await this.recaptchaValidation(req, res);
+        await this.recaptchaValidation(req, res);
         let result = await this.validationData(req);
         if (result) {
             return this.resetPassword(req , res);
@@ -35,7 +35,11 @@ module.exports = new class resetPasswordController extends Controller {
             return this.back(req , res);
         }
 
-        let user = await User.findOneAndUpdate({email: field.email} , { $set: { password: req.body.password }}); // for update user password
+        let user = await User.findOne({ email: field.email }); 
+        // for update user password
+        user.$set({ password: user.hashPassword(req.body.password) });
+        await user.save();
+
         if (!user) {
             req.flash('errors' , 'Information not updated');
             return this.back(req , res);

@@ -1,6 +1,7 @@
 const Controller = require('./controller');
 const Payment = require('app/models/payment');
 const request_http = require('request-promise');
+const ActivationCode = require('app/models/activationCode');
 
 module.exports = new class userController extends Controller {
     async index(req , res , next) {
@@ -179,6 +180,58 @@ module.exports = new class userController extends Controller {
                         type: 'error'
                     });
                 });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async activation(req , res , next) {
+        try {
+            let activationCode = await ActivationCode
+                                                .findOne({ token: req.params.token })
+                                                .gt('expire' , new Date()) // "expire" more than "new Date()"
+                                                .populate('user')
+                                                .exec();
+            if(!activationCode) {
+                this.alert(req , {
+                    title: 'Notice',
+                    message: 'This link expired , please login again',
+                    type: 'error',
+                    button: 'OK'
+                });
+                return res.redirect('/');
+            }
+
+            if(activationCode.used) {
+                this.alert(req , {
+                    title: 'Notice',
+                    message: 'This link used before , please login again for generate new one',
+                    type: 'error',
+                    button: 'OK'
+                });
+                return res.redirect('/');
+            }
+
+            // update user "active" field and update "used" field in activationCode model
+            let user = activationCode.user;
+            user.$set({ active: true });
+            activationCode.$set({ used: true});
+
+            await user.save();
+            await activationCode.save();
+
+            // login in website
+            req.logIn(user, err => {
+                if (err) console.log(err);
+                user.setRememberToken(res);
+                this.alert(req , {
+                    title: 'Notice',
+                    message: 'Your account activated',
+                    type: 'success'
+                });
+                return res.redirect('/');
+            });
+
         } catch (err) {
             next(err);
         }
