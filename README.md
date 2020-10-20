@@ -1,5 +1,5 @@
 # OSSP 
-## (Online Secure Store Project)
+## (Open source Online Secure Store Project)
 
 #### This is secure open source online store project with **Admin panel**, **User panel**, **Permission manager**, **Bank connection**, **Email server**, **OAuth** ...  features written with **nodejs + mongodb**.
 
