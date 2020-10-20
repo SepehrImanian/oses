@@ -5,9 +5,7 @@ services:
       build:
         context: .
         dockerfile: Dockerfile
-      container_name: nodecms
-      stdin_open: true
-      tty: true 
+      container_name: nodecms 
       ports:
         - 80:80
       links:
