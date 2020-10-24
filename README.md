@@ -1,7 +1,7 @@
-# OSSP 
-## (Open source Online Secure Store Project)
+# OSES
+## (Open source Secure Educational Store)
 
-#### This is secure open source online store project with **Admin panel**, **User panel**, **Permission manager**, **Bank connection**, **Email server**, **OAuth**, ...  features written with **nodejs + mongodb**.
+#### This is secure Educational Store project with **Admin panel**, **User panel**, **Permission manager**, **Bank connection**, **Email server**, **OAuth**, ...  features written with **nodejs + mongodb**.
 
 #### And with complete REST API
 
